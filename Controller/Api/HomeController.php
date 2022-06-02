@@ -40,12 +40,18 @@ class HomeController extends BaseController {
     public function eventAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
-        $arrQueryStringParams = $this->getQueryStringParams();
+        //$arrQueryStringParams = $this->getQueryStringParams();
+        $jsonParams = file_get_contents('php://input');
+        $jsonParams = json_decode($jsonParams,true);
+        //print_r($jsonParams);
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
-                $responseData = json_encode(array('destination'=>array('id'=>'100','balance'=>'10')));
-                http_response_code(201);
+                $event = new Event();
+                //$data
+                $response = $event->createEvent($jsonParams);
+                $responseData = json_encode($response);
+                //http_response_code(201);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
