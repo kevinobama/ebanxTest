@@ -1,45 +1,26 @@
 <?php
+require __DIR__ . "/common/bootstrap.php";
 
-if($_POST) {
-    $request = $_SERVER['REQUEST_URI'];
-} else {
-    $request = $_SERVER['REQUEST_URI'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = explode( '/', $uri );
+//print_r($uri);
+//$uri[2] is controller,$uri[3] is action
+//if (!isset($uri[2]) || !isset($uri[3])) {
+//    header("HTTP/1.1 404 Not Found");
+//    exit();
+//}
+
+if (!isset($uri[1])) {
+    header("HTTP/1.1 404 Not Found");
+    exit();
 }
 
-//GET /balance
-//echo($request.PHP_EOL);
-switch ($request) {
-    case '/' :
-        echo 'index.php';
-        break;
-    case '/reset' :
-        http_response_code(200);
-        echo "OK";
-        break;
-    case '/balance' :
-        http_response_code(200);
-        echo '0';
-        break;
-    case '/balance' :
-        http_response_code(200);
-        echo '0';
-        break;
-    case '/balance?account_id=1234':
-        http_response_code(404);
-        echo '0';
-        break;
-     ///balance?account_id=100
-    case '/balance?account_id=100':
-        http_response_code(200);
-        echo '20';
-        break;
-    //POST
-    case '/event' :
-        echo '{"origin": {"id":"100", "balance":15}}';
-        http_response_code(201);
-        break;
-    default:
-        http_response_code(404);
-        echo '404';
-        break;
-}
+//if($uri[2]=="event")
+
+//print_r($uri);
+require PROJECT_ROOT_PATH . "/Controller/Api/HomeController.php";
+
+$homeController = new HomeController();
+$strMethodName = $uri[1] . 'Action';
+//exit($strMethodName);
+$homeController->{$strMethodName}();

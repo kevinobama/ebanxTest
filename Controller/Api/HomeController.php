@@ -44,8 +44,8 @@ class HomeController extends BaseController
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
-
-                $responseData = json_encode(array('The US','china','russia'));
+                $responseData = json_encode(array('destination'=>array('id'=>'100','balance'=>'10')));
+                http_response_code(201);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -77,10 +77,9 @@ class HomeController extends BaseController
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
-
-                $responseData = json_encode(array('1','2'));
+                $responseData = 'OK';
             } catch (Error $e) {
-                $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+                $strErrorDesc = $e->getMessage().'Something went wrong! Please contact admin.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
             }
         } else {
@@ -92,7 +91,7 @@ class HomeController extends BaseController
         if (!$strErrorDesc) {
             $this->sendOutput(
                 $responseData,
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+                array('Content-Type: application/text', 'HTTP/1.1 200 OK')
             );
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
