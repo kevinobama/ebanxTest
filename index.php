@@ -1,5 +1,11 @@
 <?php
-$request = $_SERVER['REQUEST_URI'];
+
+if($_POST) {
+    $request = $_SERVER['REQUEST_URI'];
+} else {
+    $request = $_SERVER['REQUEST_URI'];
+}
+
 //GET /balance
 //echo($request.PHP_EOL);
 switch ($request) {
@@ -11,9 +17,11 @@ switch ($request) {
         echo "OK";
         break;
     case '/balance' :
+        http_response_code(200);
         echo '0';
         break;
     case '/balance' :
+        http_response_code(200);
         echo '0';
         break;
     case '/balance?account_id=1234':
@@ -25,9 +33,10 @@ switch ($request) {
         http_response_code(200);
         echo '20';
         break;
+    //POST
     case '/event' :
-        echo '{"destination": {"id":"100", "balance":10}}';
-        http_response_code(200);
+        echo '{"origin": {"id":"100", "balance":15}}';
+        http_response_code(201);
         break;
     default:
         http_response_code(404);
