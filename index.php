@@ -19,6 +19,8 @@ if (!isset($uri[1])) {
 
 //print_r($uri);
 require PROJECT_ROOT_PATH . "/Controller/Api/HomeController.php";
+require PROJECT_ROOT_PATH . "/Model/Balance.php";
+require PROJECT_ROOT_PATH . "/Model/Event.php";
 
 $homeController = new HomeController();
 $strMethodName = $uri[1] . 'Action';

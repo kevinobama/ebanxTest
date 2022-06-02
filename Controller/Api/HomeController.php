@@ -1,18 +1,19 @@
 <?php
+//namespace controller;
 
 class HomeController extends BaseController
 {
     //GET /balance
-    public function balanceAction()
-    {
+    public function balanceAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
-        $arrQueryStringParams = $this->getQueryStringParams();
 
         if (strtoupper($requestMethod) == 'GET') {
             try {
+                $balance = new Balance();
+                $accountId = $_GET['account_id'];
+                $responseData = $balance->getBalanceByAccountId($accountId);
 
-                $responseData = json_encode(array('one','2'));
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -25,12 +26,12 @@ class HomeController extends BaseController
         // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
-                $responseData,
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+                $responseData['balance'],
+                array('Content-Type: application/text', 'HTTP/1.1 '.$responseData['code'].' OK')
             );
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
-                array('Content-Type: application/json', $strErrorHeader)
+                array('Content-Type: application/text', $strErrorHeader)
             );
         }
 
