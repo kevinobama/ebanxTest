@@ -6,14 +6,14 @@ switch ($request) {
     case '/' :
         echo '/views/index.php';
         break;
-    case 'balance' :
-        echo "0";
+    case 'reset' :
+        echo "OK";
         break;
     case '/about' :
         echo '/views/about.php';
         break;
     case '/balance' :
-        echo '/views/about.php';
+        echo '0';
         break;
     case '/event' :
         echo '{"destination": {"id":"100", "balance":10}}';
