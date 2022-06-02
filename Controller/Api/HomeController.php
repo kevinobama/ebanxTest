@@ -50,7 +50,7 @@ class HomeController extends BaseController {
                 $event = new Event();
                 //$data
                 $response = $event->createEvent($jsonParams);
-                $responseData = json_encode($response,);
+                $responseData = json_encode($response['data']);
                 //http_response_code(201);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
@@ -63,10 +63,18 @@ class HomeController extends BaseController {
 
         // send output
         if (!$strErrorDesc) {
-            $this->sendOutput(
-                $responseData,
-                array('Content-Type: application/json', 'HTTP/1.1 201 OK')
-            );
+            if($response['code']=="404") {
+                $this->sendOutput(
+                    $response['data'],
+                    array('Content-Type: application/text', 'HTTP/1.1 '.$response['code'])
+                );
+            } else {
+                $this->sendOutput(
+                    $responseData,
+                    array('Content-Type: application/json', 'HTTP/1.1 '.$response['code'].' OK')
+                );
+            }
+
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
                 array('Content-Type: application/json', $strErrorHeader)
