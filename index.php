@@ -4,13 +4,11 @@ $request = $_SERVER['REQUEST_URI'];
 //echo($request.PHP_EOL);
 switch ($request) {
     case '/' :
-        echo '/views/index.php';
+        echo 'index.php';
         break;
     case '/reset' :
+        http_response_code(200);
         echo "OK";
-        break;
-    case '/about' :
-        echo '/views/about.php';
         break;
     case '/balance' :
         echo '0';
@@ -24,8 +22,10 @@ switch ($request) {
         break;
     case '/event' :
         echo '{"destination": {"id":"100", "balance":10}}';
+        http_response_code(200);
         break;
     default:
-        echo '/views/404.php';
+        http_response_code(404);
+        echo '404';
         break;
 }
