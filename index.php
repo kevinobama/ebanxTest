@@ -1,7 +1,7 @@
 <?php
 $request = $_SERVER['REQUEST_URI'];
 //GET /balance
-echo($request.PHP_EOL);
+//echo($request.PHP_EOL);
 switch ($request) {
     case '/' :
         echo '/views/index.php';
