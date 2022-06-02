@@ -1,16 +1,17 @@
 <?php
-require __DIR__ . "/common/bootstrap.php";
+$request = $_SERVER['REQUEST_URI'];
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = explode( '/', $uri );
-
-if ((isset($uri[2]) && $uri[2] != 'home') || !isset($uri[3])) {
-    header("HTTP/1.1 404 Not Found");
-    exit();
+switch ($request) {
+    case '/' :
+        echo '/views/index.php';
+        break;
+    case '' :
+        echo '/views/index.php';
+        break;
+    case '/about' :
+        echo '/views/about.php';
+        break;
+    default:
+        echo '/views/404.php';
+        break;
 }
-
-require PROJECT_ROOT_PATH . "/Controller/Api/HomeController.php";
-
-$homeController = new HomeController();
-$strMethodName = $uri[3] . 'Action';
-$homeController->{$strMethodName}();
