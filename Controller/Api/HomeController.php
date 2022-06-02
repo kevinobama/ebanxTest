@@ -50,7 +50,7 @@ class HomeController extends BaseController {
                 $event = new Event();
                 //$data
                 $response = $event->createEvent($jsonParams);
-                $responseData = json_encode($response);
+                $responseData = json_encode($response,JSON_PRETTY_PRINT);
                 //http_response_code(201);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
