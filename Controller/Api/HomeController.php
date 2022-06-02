@@ -12,7 +12,7 @@ class HomeController extends BaseController
         if (strtoupper($requestMethod) == 'GET') {
             try {
 
-                $responseData = json_encode(array('1','2'));
+                $responseData = json_encode(array('one','2'));
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
