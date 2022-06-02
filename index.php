@@ -20,6 +20,11 @@ switch ($request) {
         http_response_code(404);
         echo '0';
         break;
+     ///balance?account_id=100
+    case '/balance?account_id=100':
+        http_response_code(200);
+        echo '20';
+        break;
     case '/event' :
         echo '{"destination": {"id":"100", "balance":10}}';
         http_response_code(200);
