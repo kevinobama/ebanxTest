@@ -1,6 +1,10 @@
 <?php
 //require __DIR__ . "/common/bootstrap.php";
 require __DIR__ .'/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$appName = $_ENV['appName'];
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
@@ -11,19 +15,35 @@ $uri = explode( '/', $uri );
 //    exit();
 //}
 
-if (!isset($uri[1])) {
-    header("HTTP/1.1 404 Not Found");
-    exit();
-}
+$router = new App\Routes\Router(new App\Routes\Request);
 
-//if($uri[2]=="event")
+$router->get('/', function() {
+    return "kevin gates";
+});
 
-//print_r($uri);
-//require PROJECT_ROOT_PATH . "/app/Http/Controllers/Api/HomeController.php";
-//require PROJECT_ROOT_PATH . "/app/Models/Balance.php";
-//require PROJECT_ROOT_PATH . "/app/Models/Event.php";
+$router->get('/balance', function($request) {
+    $homeController = new App\Http\Controllers\Api\HomeController();
+    $homeController->balanceAction();
+});
 
-$homeController = new App\Http\Controllers\Api\HomeController();
-$strMethodName = $uri[1] . 'Action';
-//exit($strMethodName);
-$homeController->{$strMethodName}();
+$router->post('/event', function($request) {
+    $homeController = new App\Http\Controllers\Api\HomeController();
+    $homeController->eventAction();
+});
+
+$router->post('/reset', function($request) {
+    $homeController = new App\Http\Controllers\Api\HomeController();
+    $homeController->resetAction();
+});
+
+
+//exit;
+//if (!isset($uri[1])) {
+//    header("HTTP/1.1 404 Not Found");
+//    exit();
+//}
+
+//$homeController = new App\Http\Controllers\Api\HomeController();
+//$strMethodName = $uri[1] . 'Action';
+////exit($strMethodName);
+//$homeController->{$strMethodName}();
