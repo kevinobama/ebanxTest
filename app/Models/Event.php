@@ -10,11 +10,12 @@ class Event {
             }
 
             if( isset($oldbalance[$data['destination']]) && $oldbalance[$data['destination']]) {
-                //$newBalance = $oldbalance+$data['amount'];
                 $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
             } else {
                 $oldbalance[$data['destination']]=$data['amount'];
             }
+
+            $oldbalance[date('M-d H:i:s')]='date';
 
             file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
 
