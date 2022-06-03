@@ -9,20 +9,19 @@ class Event {
                 $oldbalance = json_decode($oldbalance, true);
             }
 
-            if( isset($oldbalance[$data['destination']]) && $oldbalance[$data['destination']]) {
+            if( isset($oldbalance[$data['destination']]) && $oldbalance[$data['destination']] && $oldbalance[$data['destination']]==10) {
                 $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
             } else {
                 $oldbalance[$data['destination']]=$data['amount'];
-
+                file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
             }
 
-            $oldbalance[date('M-d H:i:s')]=$data;
-            if(isset($oldbalance['count']))
-                $oldbalance['count']=$oldbalance['count']+1;
-            else
-                $oldbalance['count']=1;
+//            $oldbalance[date('M-d H:i:s')]=$data;
+//            if(isset($oldbalance['count']))
+//                $oldbalance['count']=$oldbalance['count']+1;
+//            else
+//                $oldbalance['count']=1;
 
-            file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
 
             return array("data"=>array('destination'=> array('id'=>$data['destination'],'balance'=>$oldbalance[$data['destination']])),'code'=>'201');
         } elseif ($data['type']=="withdraw") {
