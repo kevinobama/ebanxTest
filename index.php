@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . "/common/bootstrap.php";
+//require __DIR__ . "/common/bootstrap.php";
+require __DIR__ .'/vendor/autoload.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
@@ -18,11 +19,11 @@ if (!isset($uri[1])) {
 //if($uri[2]=="event")
 
 //print_r($uri);
-require PROJECT_ROOT_PATH . "/app/Http/Controller/Api/HomeController.php";
-require PROJECT_ROOT_PATH . "/app/Models/Balance.php";
-require PROJECT_ROOT_PATH . "/app/Models/Event.php";
+//require PROJECT_ROOT_PATH . "/app/Http/Controllers/Api/HomeController.php";
+//require PROJECT_ROOT_PATH . "/app/Models/Balance.php";
+//require PROJECT_ROOT_PATH . "/app/Models/Event.php";
 
-$homeController = new HomeController();
+$homeController = new App\Http\Controllers\Api\HomeController();
 $strMethodName = $uri[1] . 'Action';
 //exit($strMethodName);
 $homeController->{$strMethodName}();

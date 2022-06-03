@@ -1,5 +1,9 @@
 <?php
-//namespace controller;
+namespace App\Http\Controllers\Api;
+
+use App\Models\Event;
+use App\Models\Balance;
+
 
 class HomeController extends BaseController {
     //GET /balance
@@ -37,6 +41,12 @@ class HomeController extends BaseController {
     }
 
     //POST /event
+
+    /**
+     *
+     * validate input
+     *
+     */
     public function eventAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -74,7 +84,6 @@ class HomeController extends BaseController {
                     array('Content-Type: application/json', 'HTTP/1.1 '.$response['code'].' OK')
                 );
             }
-
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
                 array('Content-Type: application/json', $strErrorHeader)
@@ -87,7 +96,6 @@ class HomeController extends BaseController {
     public function resetAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
-        $arrQueryStringParams = $this->getQueryStringParams();
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
@@ -109,7 +117,7 @@ class HomeController extends BaseController {
             );
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
-                array('Content-Type: application/json', $strErrorHeader)
+                array('Content-Type: application/text', $strErrorHeader)
             );
         }
     }

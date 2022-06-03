@@ -1,4 +1,6 @@
 <?php
+namespace App\Models;
+
 class Event {
 
     public function  createEvent($data) {
@@ -16,13 +18,6 @@ class Event {
                 $oldbalance[$data['destination']]=$data['amount'];
                 file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
             }
-
-//            $oldbalance[date('M-d H:i:s')]=$data;
-//            if(isset($oldbalance['count']))
-//                $oldbalance['count']=$oldbalance['count']+1;
-//            else
-//                $oldbalance['count']=1;
-
 
             return array("data"=>array('destination'=> array('id'=>$data['destination'],'balance'=>$oldbalance[$data['destination']])),'code'=>'201');
         } elseif ($data['type']=="withdraw") {
