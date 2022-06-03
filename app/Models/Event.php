@@ -11,6 +11,7 @@ class Event {
 
             if( isset($oldbalance[$data['destination']]) && $oldbalance[$data['destination']] && $oldbalance[$data['destination']]==10) {
                 $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
+                unlink('balance.json');
             } else {
                 $oldbalance[$data['destination']]=$data['amount'];
                 file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
