@@ -1,18 +1,24 @@
 <?php
 class Event {
-    public static $balance=0;
 
     public function  createEvent($data) {
         if($data['type']=="deposit") {
-            $oldbalance =0;
-            if(file_exists("balance.txt"))
-                $oldbalance=file_get_contents('balance.txt');
+            $oldbalance = [];
+            if(file_exists("balance.json")) {
+                $oldbalance = file_get_contents('balance.json');
+                $oldbalance = json_decode($oldbalance, true);
+            }
 
-            $newBalance = $oldbalance+$data['amount'];
+            if( isset($oldbalance[$data['destination']]) && $oldbalance[$data['destination']]) {
+                //$newBalance = $oldbalance+$data['amount'];
+                $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
+            } else {
+                $oldbalance[$data['destination']]=$data['amount'];
+            }
 
-            file_put_contents('balance.txt', $data['amount']);
-
-            return array("data"=>array('destination'=> array('id'=> $data['destination'],'balance'=>$newBalance)),'code'=>'201');
+            file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
+            //{"destination": {"id":"100", "balance":10}}
+            return array("data"=>array('destination'=> array('id'=>$data['destination'],'balance'=>$oldbalance[$data['destination']])),'code'=>'201');
         } elseif ($data['type']=="withdraw") {
             if($data['origin']=="100")//exist
                 return array("data"=>array('origin' => array('id'=> $data['origin'],'balance'=>'15')),'code'=>'201');
