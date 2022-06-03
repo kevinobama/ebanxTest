@@ -13,9 +13,14 @@ class Event {
                 $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
             } else {
                 $oldbalance[$data['destination']]=$data['amount'];
+
             }
-            
+
             $oldbalance[date('M-d H:i:s')]=$data;
+            if(isset($oldbalance['count']))
+                $oldbalance['count']=$oldbalance['count']+1;
+            else
+                $oldbalance['count']=1;
 
             file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
 
