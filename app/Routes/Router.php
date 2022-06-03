@@ -46,11 +46,13 @@ class Router {
     private function invalidMethodHandler()
     {
         header("{$this->request->serverProtocol} 405 Method Not Allowed");
+        echo("Method Not Allowed");
     }
 
     private function defaultRequestHandler()
     {
         header("{$this->request->serverProtocol} 404 Not Found");
+        echo("Not Found");
     }
 
     /**

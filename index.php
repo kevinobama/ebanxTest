@@ -1,5 +1,4 @@
 <?php
-//require __DIR__ . "/common/bootstrap.php";
 require __DIR__ .'/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
