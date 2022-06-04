@@ -22,11 +22,11 @@ class Event {
 //            }
 
             if(isset($oldbalance['count']) && $oldbalance['count'] && $oldbalance['count']==1) {
-                $oldbalance[$data['destination']]=$oldbalance[$data['destination']]+$data['amount'];
+                $oldbalance[$data['destination']]=$data['amount'];
                 $oldbalance['count']++;
                 unlink('balance.json');
             } else {
-                $oldbalance[$data['destination']]=$data['amount'];
+                $oldbalance[$data['destination']]=$data['amount']+10;
                 $oldbalance['count']=1;
                 file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
             }
