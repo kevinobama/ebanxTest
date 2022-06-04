@@ -3,9 +3,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Event;
 use App\Models\Balance;
-
+use App\Helpers\HttpStatusCodes;
 
 class HomeController extends BaseController {
+    private $httpStatusCodes;
+    private $httpStatusCodesMap;
+
+    function __construct() {
+        $this->httpStatusCodes = HttpStatusCodes::getData();
+        $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
+    }
+
     //GET /balance
     public function balanceAction() {
         $strErrorDesc = '';
@@ -15,29 +23,28 @@ class HomeController extends BaseController {
             try {
                 $balance = new Balance();
                 $accountId = $_GET['account_id'];
-                $responseData = $balance->getBalanceByAccountId($accountId);
+                $response = $balance->getBalanceByAccountId($accountId);
 
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
-                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+                $strErrorHeader = 'HTTP/1.1 500 '.$this->httpStatusCodes[500];
             }
         } else {
             $strErrorDesc = 'Method not supported';
-            $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+            $strErrorHeader = 'HTTP/1.1 422 '.$this->httpStatusCodes[422];
         }
 
         // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
-                $responseData['balance'],
-                array('Content-Type: application/text', 'HTTP/1.1 '.$responseData['code'].' OK')
+                $response['balance'],
+                array('Content-Type: application/text', 'HTTP/1.1 '.$this->httpStatusCodesMap[$response['result']].' '.$response['result'])
             );
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
                 array('Content-Type: application/text', $strErrorHeader)
             );
         }
-
     }
 
     //POST /event
@@ -53,7 +60,6 @@ class HomeController extends BaseController {
         //$arrQueryStringParams = $this->getQueryStringParams();
         $jsonParams = file_get_contents('php://input');
         $jsonParams = json_decode($jsonParams,true);
-        //print_r($jsonParams);
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
@@ -64,24 +70,23 @@ class HomeController extends BaseController {
                 //http_response_code(201);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
-                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+                $strErrorHeader = 'HTTP/1.1 500 '.$this->httpStatusCodes[500];
             }
         } else {
             $strErrorDesc = 'Method not supported';
-            $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+            $strErrorHeader = 'HTTP/1.1 422 '.$this->httpStatusCodes[422];
         }
 
-        // send output
         if (!$strErrorDesc) {
-            if($response['code']=="404") {
+            if($response['result']=="Created") {
                 $this->sendOutput(
-                    $response['data'],
-                    array('Content-Type: application/text', 'HTTP/1.1 '.$response['code'])
+                    $responseData,
+                    array('Content-Type: application/json', 'HTTP/1.1 '.$this->httpStatusCodesMap[$response['result']].' '.$response['result'])
                 );
             } else {
                 $this->sendOutput(
-                    $responseData,
-                    array('Content-Type: application/json', 'HTTP/1.1 '.$response['code'].' OK')
+                    $response['data'],
+                    array('Content-Type: application/text', 'HTTP/1.1 '.$this->httpStatusCodesMap[$response['result']].' '.$response['result'])
                 );
             }
         } else {
@@ -89,7 +94,6 @@ class HomeController extends BaseController {
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
-
     }
 
     //POST /reset
@@ -99,21 +103,21 @@ class HomeController extends BaseController {
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
-                $responseData = 'OK';
+                $responseData = $this->httpStatusCodes[200];
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact admin.';
-                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+                $strErrorHeader = 'HTTP/1.1 500 '.$this->httpStatusCodes[500];
             }
         } else {
             $strErrorDesc = 'Method not supported';
-            $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+            $strErrorHeader = 'HTTP/1.1 422 '.$this->httpStatusCodes[422];
         }
 
         // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
                 $responseData,
-                array('Content-Type: application/text', 'HTTP/1.1 200 OK')
+                array('Content-Type: application/text', 'HTTP/1.1 200 '.$this->httpStatusCodes[200])
             );
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),

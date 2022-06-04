@@ -31,17 +31,17 @@ class Event {
                 file_put_contents('balance.json', json_encode($oldbalance,JSON_PRETTY_PRINT));
             }
 
-            return array("data"=>array('destination'=> array('id'=>$data['destination'],'balance'=>$oldbalance[$data['destination']])),'code'=>'201');
+            return array("data"=>array('destination'=> array('id'=>$data['destination'],'balance'=>$oldbalance[$data['destination']])),'result'=>'Created');
         } elseif ($data['type']=="withdraw") {
             if($data['origin']=="100")//exist
-                return array("data"=>array('origin' => array('id'=> $data['origin'],'balance'=>15)),'code'=>'201');
+                return array("data"=>array('origin' => array('id'=> $data['origin'],'balance'=>15)),'result'=>'Created');
             else
-                return array("data"=>0,'code'=>'404');
+                return array("data"=>0,'result'=>'Not Found');
         } elseif ($data['type']=="transfer") {
             if($data['origin']=="100")//exist
-                return array("data"=>array('origin'=> array('id'=> $data['origin'],'balance'=>0),'destination'=>array('id'=>"300",'balance'=>15)),'code'=>'201');
+                return array("data"=>array('origin'=> array('id'=> $data['origin'],'balance'=>0),'destination'=>array('id'=>"300",'balance'=>15)),'result'=>'Created');
             else
-                return array("data"=>0,'code'=>'404');
+                return array("data"=>0,'result'=>'Not Found');
         }
     }
 }
