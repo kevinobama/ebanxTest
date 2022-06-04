@@ -35,6 +35,10 @@ $router->post('/reset', function($request) {
     $homeController->resetAction();
 });
 
+$router->post('/token', function($request) {
+    $homeController = new App\Http\Controllers\Api\HomeController();
+    $homeController->tokenAction();
+});
 
 //exit;
 //if (!isset($uri[1])) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Event;
 use App\Models\Balance;
 use App\Helpers\HttpStatusCodes;
+use App\Helpers\JwtUtils;
 
 class HomeController extends BaseController {
     private $httpStatusCodes;
@@ -12,6 +13,8 @@ class HomeController extends BaseController {
     function __construct() {
         $this->httpStatusCodes = HttpStatusCodes::getData();
         $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
+        //authentication using JWT
+
     }
 
     //GET /balance
@@ -48,12 +51,6 @@ class HomeController extends BaseController {
     }
 
     //POST /event
-
-    /**
-     *
-     * validate input
-     *
-     */
     public function eventAction() {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -122,6 +119,42 @@ class HomeController extends BaseController {
         } else {
             $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
                 array('Content-Type: application/text', $strErrorHeader)
+            );
+        }
+    }
+
+    public function tokenAction() {
+        $strErrorDesc = '';
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+
+        if (strtoupper($requestMethod) == 'POST') {
+            try {
+                $userName='billgates';
+                $headers = array('alg'=>'HS256','typ'=>'JWT');
+                $payload = array('username'=>$userName, 'exp'=>(time() + 60));
+
+                $jwt = JwtUtils::generateJwt($headers, $payload);
+
+                $responseData = json_encode(array('token' => $jwt));
+
+            } catch (Error $e) {
+                $strErrorDesc = $e->getMessage().'Something went wrong! Please contact admin.';
+                $strErrorHeader = 'HTTP/1.1 500 '.$this->httpStatusCodes[500];
+            }
+        } else {
+            $strErrorDesc = 'Method not supported';
+            $strErrorHeader = 'HTTP/1.1 422 '.$this->httpStatusCodes[422];
+        }
+
+        // send output
+        if (!$strErrorDesc) {
+            $this->sendOutput(
+                $responseData,
+                array('Content-Type: application/json', 'HTTP/1.1 200 '.$this->httpStatusCodes[200])
+            );
+        } else {
+            $this->sendOutput(json_encode(array('error' => $strErrorDesc)),
+                array('Content-Type: application/json', $strErrorHeader)
             );
         }
     }
