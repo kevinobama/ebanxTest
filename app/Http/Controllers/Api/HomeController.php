@@ -23,6 +23,9 @@ class HomeController extends BaseController {
 //                array('Content-Type: application/json', $strErrorHeader)
 //            );
         }
+
+        //to do
+        //Rate limiting
     }
 
     //GET /balance
