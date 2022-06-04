@@ -28,10 +28,10 @@ class JwtUtils {
         $is_token_expired = ($expiration - time()) < 0;
 
         // build a signature based on the header and payload using the secret
-        $base64_url_header = base64url_encode($header);
-        $base64_url_payload = base64url_encode($payload);
+        $base64_url_header = self::base64urlEncode($header);
+        $base64_url_payload = self::base64urlEncode($payload);
         $signature = hash_hmac('SHA256', $base64_url_header . "." . $base64_url_payload, $secret, true);
-        $base64_url_signature = base64url_encode($signature);
+        $base64_url_signature = self::base64urlEncode($signature);
 
         // verify it matches the signature provided in the jwt
         $is_signature_valid = ($base64_url_signature === $signature_provided);
@@ -68,7 +68,7 @@ class JwtUtils {
     }
 
     public static function getHearerToken() {
-        $headers = get_authorization_header();
+        $headers = self::getAuthorizationHeader();
 
         // HEADER: Get the access token from the header
         if (!empty($headers)) {

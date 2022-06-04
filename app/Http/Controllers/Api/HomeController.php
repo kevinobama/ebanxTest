@@ -14,7 +14,15 @@ class HomeController extends BaseController {
         $this->httpStatusCodes = HttpStatusCodes::getData();
         $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
         //authentication using JWT
-
+        $bearerToken = JwtUtils::getHearerToken();
+        $isTokenValid = JwtUtils::isJwtValid($bearerToken);
+        //echo $bearerToken;
+        if(!$isTokenValid) {
+            echo json_encode(array('error' => 'Access denied'));
+//            $this->sendOutput(json_encode(array('error' => "Access denied")),
+//                array('Content-Type: application/json', $strErrorHeader)
+//            );
+        }
     }
 
     //GET /balance
