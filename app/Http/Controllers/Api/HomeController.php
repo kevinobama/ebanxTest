@@ -18,7 +18,7 @@ class HomeController extends BaseController {
         $isTokenValid = JwtUtils::isJwtValid($bearerToken);
         //echo $bearerToken;
         if(!$isTokenValid) {
-            echo json_encode(array('error' => 'Access denied'));
+            //echo json_encode(array('error' => 'Access denied'));
 //            $this->sendOutput(json_encode(array('error' => "Access denied")),
 //                array('Content-Type: application/json', $strErrorHeader)
 //            );
