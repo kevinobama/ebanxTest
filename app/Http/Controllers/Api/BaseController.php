@@ -12,20 +12,24 @@ class BaseController {
     function __construct() {
         $this->httpStatusCodes = HttpStatusCodes::getData();
         $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
+
         //authentication using JWT
         $bearerToken = JwtUtils::getHearerToken();
         $this->isTokenValid = JwtUtils::isJwtValid($bearerToken);
-        //echo $bearerToken;
 
         //to do
         //Rate limiting
+
+        //Caching
     }
 
     public function checkAuth() {
-        if(!$this->isTokenValid) {
-            $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
-                array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
-            );
+        if(isset($_ENV['enableAuth']) && $_ENV['enableAuth']=="true") {
+            if(!$this->isTokenValid) {
+                $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
+                    array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
+                );
+            }
         }
     }
 

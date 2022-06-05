@@ -16,6 +16,7 @@ class HomeController extends BaseController {
 
     //GET /balance
     public function balanceAction() {
+        $this->checkAuth();
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
 
@@ -49,6 +50,7 @@ class HomeController extends BaseController {
 
     //POST /event
     public function eventAction() {
+        $this->checkAuth();
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         //$arrQueryStringParams = $this->getQueryStringParams();
@@ -92,7 +94,7 @@ class HomeController extends BaseController {
 
     //POST /reset
     public function resetAction() {
-        //$this->checkAuth();
+        $this->checkAuth();
 
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
