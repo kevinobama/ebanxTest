@@ -16,22 +16,23 @@ $router->get('/', function() {
 
 $router->get('/balance', function($request) {
     $homeController = new App\Http\Controllers\Api\HomeController();
-    $homeController->balanceAction();
+    $homeController->balanceAction($request);
 });
 
 $router->post('/event', function($request) {
+
     $homeController = new App\Http\Controllers\Api\HomeController();
-    $homeController->eventAction();
+    $homeController->eventAction($request);
 });
 
 $router->post('/reset', function($request) {
     $homeController = new App\Http\Controllers\Api\HomeController();
-    $homeController->resetAction();
+    $homeController->resetAction($request);
 });
 
 $router->post('/token', function($request) {
     $homeController = new App\Http\Controllers\Api\HomeController();
-    $homeController->tokenAction();
+    $homeController->tokenAction($request);
 });
 
 //$homeController = new App\Http\Controllers\Api\HomeController();
