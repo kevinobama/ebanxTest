@@ -15,10 +15,10 @@ class HomeController extends BaseController {
     }
 
     //GET /balance
-    public function balanceAction() {
+    public function balanceAction($request) {
         $this->checkAuth();
         $strErrorDesc = '';
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestMethod = $request->requestMethod;
 
         if (strtoupper($requestMethod) == 'GET') {
             try {
@@ -50,10 +50,9 @@ class HomeController extends BaseController {
 
     //POST /event
     public function eventAction($request) {
-        //print_r($request);
         $this->checkAuth();
         $strErrorDesc = '';
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestMethod = $request->requestMethod;
         //$arrQueryStringParams = $this->getQueryStringParams();
         $jsonParams = file_get_contents('php://input');
         $jsonParams = json_decode($jsonParams,true);
@@ -94,11 +93,11 @@ class HomeController extends BaseController {
     }
 
     //POST /reset
-    public function resetAction() {
+    public function resetAction($request) {
         $this->checkAuth();
 
         $strErrorDesc = '';
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestMethod = $request->requestMethod;
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
@@ -125,9 +124,10 @@ class HomeController extends BaseController {
         }
     }
 
-    public function tokenAction() {
+    //POST token
+    public function tokenAction($request) {
         $strErrorDesc = '';
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestMethod = $request->requestMethod;
 
         if (strtoupper($requestMethod) == 'POST') {
             try {
