@@ -49,8 +49,8 @@ class HomeController extends BaseController {
     }
 
     //POST /event
-    public function eventAction(Request $request) {
-        print_r($request);
+    public function eventAction($request) {
+        //print_r($request);
         $this->checkAuth();
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];

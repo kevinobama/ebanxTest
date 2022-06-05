@@ -17,23 +17,19 @@ class JwtUtils {
     }
 
     public static function isJwtValid($jwt, $secret = 'secret') {
-        // split the jwt
         $tokenParts = explode('.', $jwt);
         $header = base64_decode($tokenParts[0]);
         $payload = base64_decode($tokenParts[1]);
         $signatureProvided = $tokenParts[2];
 
-        // check the expiration time - note this will cause an error if there is no 'exp' claim in the jwt
         $expiration = json_decode($payload)->exp;
         $isTokenExpired = ($expiration - time()) < 0;
 
-        // build a signature based on the header and payload using the secret
         $base64UrlHeader = self::base64urlEncode($header);
         $base64UrlPayload = self::base64urlEncode($payload);
         $signature = hash_hmac('SHA256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
         $base64UrlSignature = self::base64urlEncode($signature);
 
-        // verify it matches the signature provided in the jwt
         $isSignatureValid = ($base64UrlSignature === $signatureProvided);
 
         if ($isTokenExpired || !$isSignatureValid) {
@@ -58,7 +54,7 @@ class JwtUtils {
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
             $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
-            //print_r($requestHeaders);
+
             if (isset($requestHeaders['Authorization'])) {
                 $headers = trim($requestHeaders['Authorization']);
             }

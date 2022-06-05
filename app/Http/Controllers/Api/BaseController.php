@@ -13,10 +13,6 @@ class BaseController {
         $this->httpStatusCodes = HttpStatusCodes::getData();
         $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
 
-        //authentication using JWT
-        $bearerToken = JwtUtils::getHearerToken();
-        $this->isTokenValid = JwtUtils::isJwtValid($bearerToken);
-
         //to do
         //Rate limiting
 
@@ -25,6 +21,10 @@ class BaseController {
 
     public function checkAuth() {
         if(isset($_ENV['enableAuth']) && $_ENV['enableAuth']=="true") {
+            //authentication using JWT
+            $bearerToken = JwtUtils::getHearerToken();
+            if($bearerToken) $this->isTokenValid = JwtUtils::isJwtValid($bearerToken);
+
             if(!$this->isTokenValid) {
                 $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
                     array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
