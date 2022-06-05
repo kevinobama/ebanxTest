@@ -3,22 +3,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Event;
 use App\Models\Balance;
-use App\Helpers\HttpStatusCodes;
 use App\Helpers\JwtUtils;
 
 class HomeController extends BaseController {
 
     function __construct() {
         parent::__construct();
-        //authentication using JWT
-//        $bearerToken = JwtUtils::getHearerToken();
-//        $isTokenValid = JwtUtils::isJwtValid($bearerToken);
-//        //echo $bearerToken;
-//        if(!$isTokenValid) {
-//            $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
-//                array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
-//            );
-//        }
 
         //to do
         //Rate limiting
