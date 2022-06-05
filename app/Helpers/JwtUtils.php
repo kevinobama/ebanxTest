@@ -4,14 +4,14 @@ namespace App\Helpers;
 
 class JwtUtils {
     public static function generateJwt($headers, $payload, $secret = 'secret') {
-        $headers_encoded = self::base64urlEncode(json_encode($headers));
+        $headersEncoded = self::base64urlEncode(json_encode($headers));
 
-        $payload_encoded = self::base64urlEncode(json_encode($payload));
+        $payloadEncoded = self::base64urlEncode(json_encode($payload));
 
-        $signature = hash_hmac('SHA256', "$headers_encoded.$payload_encoded", $secret, true);
-        $signature_encoded = self::base64urlEncode($signature);
+        $signature = hash_hmac('SHA256', "$headersEncoded.$payloadEncoded", $secret, true);
+        $signatureEncoded = self::base64urlEncode($signature);
 
-        $jwt = "$headers_encoded.$payload_encoded.$signature_encoded";
+        $jwt = "$headersEncoded.$payloadEncoded.$signatureEncoded";
 
         return $jwt;
     }
@@ -21,22 +21,22 @@ class JwtUtils {
         $tokenParts = explode('.', $jwt);
         $header = base64_decode($tokenParts[0]);
         $payload = base64_decode($tokenParts[1]);
-        $signature_provided = $tokenParts[2];
+        $signatureProvided = $tokenParts[2];
 
         // check the expiration time - note this will cause an error if there is no 'exp' claim in the jwt
         $expiration = json_decode($payload)->exp;
-        $is_token_expired = ($expiration - time()) < 0;
+        $isTokenExpired = ($expiration - time()) < 0;
 
         // build a signature based on the header and payload using the secret
-        $base64_url_header = self::base64urlEncode($header);
-        $base64_url_payload = self::base64urlEncode($payload);
-        $signature = hash_hmac('SHA256', $base64_url_header . "." . $base64_url_payload, $secret, true);
-        $base64_url_signature = self::base64urlEncode($signature);
+        $base64UrlHeader = self::base64urlEncode($header);
+        $base64UrlPayload = self::base64urlEncode($payload);
+        $signature = hash_hmac('SHA256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
+        $base64UrlSignature = self::base64urlEncode($signature);
 
         // verify it matches the signature provided in the jwt
-        $is_signature_valid = ($base64_url_signature === $signature_provided);
+        $isSignatureValid = ($base64UrlSignature === $signatureProvided);
 
-        if ($is_token_expired || !$is_signature_valid) {
+        if ($isTokenExpired || !$isSignatureValid) {
             return FALSE;
         } else {
             return TRUE;
@@ -76,6 +76,7 @@ class JwtUtils {
                 return $matches[1];
             }
         }
+
         return null;
     }
 }

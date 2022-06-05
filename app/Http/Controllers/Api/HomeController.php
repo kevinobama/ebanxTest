@@ -7,22 +7,18 @@ use App\Helpers\HttpStatusCodes;
 use App\Helpers\JwtUtils;
 
 class HomeController extends BaseController {
-    private $httpStatusCodes;
-    private $httpStatusCodesMap;
 
     function __construct() {
-        $this->httpStatusCodes = HttpStatusCodes::getData();
-        $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
+        parent::__construct();
         //authentication using JWT
-        $bearerToken = JwtUtils::getHearerToken();
-        $isTokenValid = JwtUtils::isJwtValid($bearerToken);
-        //echo $bearerToken;
-        if(!$isTokenValid) {
-            //echo json_encode(array('error' => 'Access denied'));
-//            $this->sendOutput(json_encode(array('error' => "Access denied")),
-//                array('Content-Type: application/json', $strErrorHeader)
+//        $bearerToken = JwtUtils::getHearerToken();
+//        $isTokenValid = JwtUtils::isJwtValid($bearerToken);
+//        //echo $bearerToken;
+//        if(!$isTokenValid) {
+//            $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
+//                array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
 //            );
-        }
+//        }
 
         //to do
         //Rate limiting
@@ -106,6 +102,8 @@ class HomeController extends BaseController {
 
     //POST /reset
     public function resetAction() {
+        //$this->checkAuth();
+
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
 

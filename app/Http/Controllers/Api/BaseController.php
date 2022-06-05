@@ -1,8 +1,34 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-class BaseController
-{
+use App\Helpers\HttpStatusCodes;
+use App\Helpers\JwtUtils;
+
+class BaseController {
+    protected $httpStatusCodes;
+    protected $httpStatusCodesMap;
+    protected $isTokenValid;
+
+    function __construct() {
+        $this->httpStatusCodes = HttpStatusCodes::getData();
+        $this->httpStatusCodesMap = array_flip($this->httpStatusCodes);
+        //authentication using JWT
+        $bearerToken = JwtUtils::getHearerToken();
+        $this->isTokenValid = JwtUtils::isJwtValid($bearerToken);
+        //echo $bearerToken;
+
+        //to do
+        //Rate limiting
+    }
+
+    public function checkAuth() {
+        if(!$this->isTokenValid) {
+            $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[401])),
+                array('Content-Type: application/json', 'HTTP/1.1 401 '.$this->httpStatusCodes[401])
+            );
+        }
+    }
+
     /**
      * __call magic method.
      */
