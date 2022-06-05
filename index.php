@@ -7,12 +7,6 @@ $appName = $_ENV['appName'];
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
-//print_r($uri);
-//$uri[2] is controller,$uri[3] is action
-//if (!isset($uri[2]) || !isset($uri[3])) {
-//    header("HTTP/1.1 404 Not Found");
-//    exit();
-//}
 
 $router = new App\Routes\Router(new App\Routes\Request);
 
@@ -39,12 +33,6 @@ $router->post('/token', function($request) {
     $homeController = new App\Http\Controllers\Api\HomeController();
     $homeController->tokenAction();
 });
-
-//exit;
-//if (!isset($uri[1])) {
-//    header("HTTP/1.1 404 Not Found");
-//    exit();
-//}
 
 //$homeController = new App\Http\Controllers\Api\HomeController();
 //$strMethodName = $uri[1] . 'Action';
