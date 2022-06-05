@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Routes;
 
 class Router {
@@ -8,17 +9,14 @@ class Router {
         "POST"
     );
 
-    function __construct(IRequest $request)
-    {
+    function __construct(IRequest $request) {
         $this->request = $request;
     }
 
-    function __call($name, $args)
-    {
+    function __call($name, $args) {
         list($route, $method) = $args;
 
-        if(!in_array(strtoupper($name), $this->supportedHttpMethods))
-        {
+        if (!in_array(strtoupper($name), $this->supportedHttpMethods)) {
             $this->invalidMethodHandler();
         }
 
@@ -29,28 +27,24 @@ class Router {
      * Removes trailing forward slashes from the right of the route.
      * @param route (string)
      */
-    private function formatRoute($route)
-    {
+    private function formatRoute($route) {
         $result = rtrim($route, '/');
-        if(strpos($route,'?')!==false) {
-            list($result,$queryString) = explode('?',$route);
+        if (strpos($route, '?') !== false) {
+            list($result, $queryString) = explode('?', $route);
         }
 
-        if ($result === '')
-        {
+        if ($result === '') {
             return '/';
         }
         return $result;
     }
 
-    private function invalidMethodHandler()
-    {
+    private function invalidMethodHandler() {
         header("{$this->request->serverProtocol} 405 Method Not Allowed");
         echo("Method Not Allowed");
     }
 
-    private function defaultRequestHandler()
-    {
+    private function defaultRequestHandler() {
         header("{$this->request->serverProtocol} 404 Not Found");
         echo("Not Found");
     }
@@ -58,14 +52,12 @@ class Router {
     /**
      * Resolves a route
      */
-    function resolve()
-    {
+    function resolve() {
         $methodDictionary = $this->{strtolower($this->request->requestMethod)};
         $formatedRoute = $this->formatRoute($this->request->requestUri);
         $method = $methodDictionary[$formatedRoute];
 
-        if(is_null($method))
-        {
+        if (is_null($method)) {
             $this->defaultRequestHandler();
             return;
         }
@@ -73,8 +65,7 @@ class Router {
         echo call_user_func_array($method, array($this->request));
     }
 
-    function __destruct()
-    {
+    function __destruct() {
         $this->resolve();
     }
 }
