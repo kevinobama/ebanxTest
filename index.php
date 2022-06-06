@@ -34,8 +34,3 @@ $router->post('/token', function($request) {
     $homeController = new App\Http\Controllers\Api\HomeController();
     $homeController->tokenAction($request);
 });
-
-//$homeController = new App\Http\Controllers\Api\HomeController();
-//$strMethodName = $uri[1] . 'Action';
-////exit($strMethodName);
-//$homeController->{$strMethodName}();
