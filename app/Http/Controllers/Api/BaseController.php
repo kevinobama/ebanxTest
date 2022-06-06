@@ -44,30 +44,30 @@ class BaseController {
      * X-Rate-Limit-Reset, the number of seconds to wait in order to get the maximum number of allowed requests
      */
     public function rateLimit() {
-        header("X-Rate-Limit-Limit: 60");
-        header("X-Rate-Limit-Remaining: 55");
-        header("X-Rate-Limit-Reset: " . time());
-
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-
-        $lastCall = $redis->get("lastCall");
-        $count = $redis->get("count");
-
-        if ($lastCall) {
-            $last = strtotime($lastCall);
-            $current = strtotime(date("Y-m-d h:i:s"));
-            $sec = abs($last - $current);
-
-            if ($sec <= 5 && $count > 60) {
-                $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[429])),
-                    array('Content-Type: application/json', 'HTTP/1.1 429 ' . $this->httpStatusCodes[429])
-                );
-            }
-        }
-
-        $redis->set("lastCall", date("Y-m-d h:i:s"));
-        $redis->set("count", $redis->get("count") + 1);
+//        header("X-Rate-Limit-Limit: 60");
+//        header("X-Rate-Limit-Remaining: 55");
+//        header("X-Rate-Limit-Reset: " . time());
+//
+//        $redis = new Redis();
+//        $redis->connect('127.0.0.1', 6379);
+//
+//        $lastCall = $redis->get("lastCall");
+//        $count = $redis->get("count");
+//
+//        if ($lastCall) {
+//            $last = strtotime($lastCall);
+//            $current = strtotime(date("Y-m-d h:i:s"));
+//            $sec = abs($last - $current);
+//
+//            if ($sec <= 5 && $count > 60) {
+//                $this->sendOutput(json_encode(array('error' => $this->httpStatusCodes[429])),
+//                    array('Content-Type: application/json', 'HTTP/1.1 429 ' . $this->httpStatusCodes[429])
+//                );
+//            }
+//        }
+//
+//        $redis->set("lastCall", date("Y-m-d h:i:s"));
+//        $redis->set("count", $redis->get("count") + 1);
     }
 
     /**
