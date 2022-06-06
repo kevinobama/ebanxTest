@@ -3,10 +3,7 @@ require __DIR__ .'/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$appName = $_ENV['appName'];
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = explode( '/', $uri );
 
 $router = new App\Routes\Router(new App\Routes\Request);
 
