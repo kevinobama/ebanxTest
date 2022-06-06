@@ -3,8 +3,6 @@ require __DIR__ .'/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-
-
 $router = new App\Routes\Router(new App\Routes\Request);
 
 $router->get('/', function() {
